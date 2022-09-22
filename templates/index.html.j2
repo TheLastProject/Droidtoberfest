@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Droidtoberfest</title>
+</head>
+<body>
+  <h1>Droidtoberfest</h1>
+  <p>This website scans <a href="https://f-droid.org/">F-Droid</a> for projects joining Hacktoberfest. Hopefully this will make it the best place to find cool Open Source Android projects to contribute to.</p>
+  <p><small>Help improve this website on <a href="https://github.com/TheLastProject/Droidtoberfest">Droidtoberfest</a></small></p>
+  <h2>Hacktoberfest apps</h2>
+  <p>The following apps on F-Droid joined Hacktoberfest.</p>
+  <div>
+  {% for app in apps | selectattr("hacktoberfest") %}
+    <a href="{{ app.repo }}">{{ app.name }}</a>
+  {% endfor %}
+  </div>
+  <h2>Non-Hacktoberfest apps</h2>
+  <p>The following apps on F-Droid have not joined Hacktoberfest. You can still contribute to them, but be aware contributions won't count for Hacktoberfest.</p>
+  <div>
+  {% for app in apps | rejectattr("hacktoberfest") %}
+    <a href="{{ app.repo }}">{{ app.name }}</a>
+  {% endfor %}
+  </div>
+</body>
+</html>
