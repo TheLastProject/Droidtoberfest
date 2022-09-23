@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Droidtoberfest</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Droidtoberfest</h1>
@@ -11,14 +12,14 @@
   <h2>Hacktoberfest apps</h2>
   <p>The following apps on F-Droid joined Hacktoberfest.</p>
   <div>
-  {% for app in apps | selectattr("hacktoberfest") %}
+  {% for app in apps | selectattr("hacktoberfest") | sort(attribute='name') %}
     <a href="{{ app.repo }}">{{ app.name }}</a>
   {% endfor %}
   </div>
   <h2>Non-Hacktoberfest apps</h2>
   <p>The following apps on F-Droid have not joined Hacktoberfest. You can still contribute to them, but be aware contributions won't count for Hacktoberfest.</p>
   <div>
-  {% for app in apps | rejectattr("hacktoberfest") %}
+  {% for app in apps | rejectattr("hacktoberfest") | sort(attribute='name') %}
     <a href="{{ app.repo }}">{{ app.name }}</a>
   {% endfor %}
   </div>

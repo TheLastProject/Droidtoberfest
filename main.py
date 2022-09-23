@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 from urllib.parse import urlparse
 
@@ -174,6 +175,10 @@ class SiteBuilder:
         # Ensure docs dir exists
         os.makedirs('docs', exist_ok=True)
 
+        # Copy CSS
+        shutil.copy('static/style.css', 'docs')
+
+        # Render template
         template = self.env.get_template('index.html.j2')
         with open('docs/index.html', 'w+') as f:
             html = template.render(apps=self.apps)
