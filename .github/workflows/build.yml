@@ -16,6 +16,7 @@ jobs:
       - run: python3 main.py
         env:
           GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
+      - run: 'echo "droidtoberfest.sylviavanos.nl" > docs/CNAME'
       - run: git config user.name github-actions
       - run: git config user.email github-actions@github.com
       - run: git add --force docs
