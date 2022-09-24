@@ -132,6 +132,7 @@ class App:
 
 class SiteBuilder:
     def __init__(self):
+        self._debug_app_limit = int(os.environ['DEBUG_APP_LIMIT']) if 'DEBUG_APP_LIMIT' in os.environ else None
         self.env = Environment(loader=FileSystemLoader('templates'))
         self.apps = self._get_apps()
 
@@ -168,6 +169,10 @@ class SiteBuilder:
 
             name = app_data['AutoName'] if 'AutoName' in app_data else entry['name'][:-4]  # Remove .yml at the end of name
             apps.append(App(name=name, repo=repo))
+
+            if self._debug_app_limit is not None and len(apps) >= self._debug_app_limit:
+                print("debug: DEBUG_APP_LIMIT reached, returning early")
+                return apps
 
         return apps
 
