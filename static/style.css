@@ -21,6 +21,8 @@ h1{
     padding: 20px;
     -moz-padding:2px;
     border-radius: 35px 0 35px 0;
+    -webkit-box-shadow: 5px 5px 1px rgba(255, 192, 203, 0.288);
+            box-shadow: 5px 5px 1px rgba(255, 192, 203, 0.288);
 }
 
 p{
@@ -29,9 +31,9 @@ p{
     background: var(--p-gradient);
     margin-left: 75px;
     margin-right: -40px;
-    padding: 20px;
+    padding: 20px 40px 20px 10px;
     border-bottom: var(--p-border) solid;
-    border-width: 0 2 2 0;
+    border-width: 0px 2px 2px 0px;
 }
 p::before{
     content: '';
@@ -42,10 +44,10 @@ p::before{
     display: block;
     width: 20px;
     height: 100%;
-    border-bottom: 3px var(--p-border) solid;
+    border-bottom: 2px var(--p-border) solid;
 }
 small{
-    color: aliceblue;
+    color: brown;
     margin-left: 100px;
     margin-right: -40px;
     background: var(--p-gradient);
@@ -54,21 +56,48 @@ small{
     border-bottom: var(--p-border) solid;
 }
 h2{
-    color: brown;
+    color: crimson;
     text-align: center;
-    text-decoration-line: underline;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(255, 255, 255, 0.425)));
+    background-image: -o-linear-gradient(transparent, rgba(255, 255, 255, 0.425));
+    background-image: linear-gradient(transparent, rgba(255, 255, 255, 0.425));
+    padding-top: 1em;
+    margin-left: 40%;
+    margin-right: 40%;
+    height: 2em;
+    -webkit-box-shadow: 5px 5px 15px rgba(255, 192, 203, 0.349);
+            box-shadow: 5px 5px 15px rgba(255, 192, 203, 0.349);
 }
 div{
-    background-color: rgba(241, 241, 241, 0.6);
+    background-image: -o-repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(241, 241, 241, 0.6) 49%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6) 49%) ;
+    background-image: repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.8), rgba(241, 241, 241, 0.6) 49%, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6) 49%) ;
     line-height: 40px;
     
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 10%;
+    margin-right: 10%;
     text-align:center;
     padding: 10px;
     border: rgba(255, 255, 255, 0.685) 2px solid;
-    border-radius: 50px;
+    border-radius: 0 50px 0 50px;
+    max-height: 1000px;
+    overflow-y: scroll;
+    row-gap: 20px;
+}
+div::-webkit-scrollbar{
+    width: 1em;
+}
+div::-webkit-scrollbar-track{
+    margin-block: 30px;
+    right: -10px;
+    margin-right: 10px;
     
+}
+div::-webkit-scrollbar-thumb{
+    background-color: rgba(255, 192, 203, 0.562);
+    border-radius: 1em;
+}
+a{
+    color: darkred;
 }
 div > a{
     position: relative;
@@ -79,9 +108,11 @@ div > a{
     border-radius: 25px;
     padding: 5px;
     line-height: 20px;
-    text-decoration-line: none;
-    box-shadow: 2px 5px 5px rgba(255, 0, 221, 0.226);
-    color: darkred;
+    -webkit-text-decoration-line: none;
+            text-decoration-line: none;
+    -webkit-box-shadow: 2px 5px 5px rgba(255, 0, 221, 0.226);
+            box-shadow: 2px 5px 5px rgba(255, 0, 221, 0.226);
+    
     overflow: hidden;
 }
 div > a::before{
@@ -107,7 +138,11 @@ div > a::after{
     inset: 2px;
     z-index: -1;
     size: 1;
+    -webkit-transition: -webkit-filter 1s;
+    transition: -webkit-filter 1s;
+    -o-transition: filter 1s;
     transition: filter 1s;
+    transition: filter 1s, -webkit-filter 1s;
 }
 div > a:hover::before{
     content: '';
@@ -117,9 +152,13 @@ div > a:hover::before{
     top: calc(-500px + 50%);
     left: -50%;
     background-image: conic-gradient(hotpink,red,orange,yellow,lime,turquoise,indigo,violet);
-    transform-origin: center;
-    animation: animate linear infinite;
-    animation-duration: 4s;
+    -webkit-transform-origin: center;
+        -ms-transform-origin: center;
+            transform-origin: center;
+    -webkit-animation: animate linear infinite;
+            animation: animate linear infinite;
+    -webkit-animation-duration: 4s;
+            animation-duration: 4s;
     z-index: -2;
 }
 
@@ -134,13 +173,32 @@ h1::before{
     border-radius: 50%;
     background-color: rgb(0, 225, 255);
 
-    animation: animate 20s linear infinite;
-    filter: blur(100px);
+    -webkit-animation: animate 20s linear infinite;
+
+            animation: animate 20s linear infinite;
+    -webkit-filter: blur(100px);
+            filter: blur(100px);
     z-index: -1;
 
-    box-shadow: -250px -250px hotpink, -250px 0px red, -250px 250px orange, 0px -250px yellow, 0px 250px lime, 250px -250px turquoise, 250px 0px indigo, 250px 250px violet;
+    -webkit-box-shadow: -250px -250px hotpink, -250px 0px red, -250px 250px orange, 0px -250px yellow, 0px 250px lime, 250px -250px turquoise, 250px 0px indigo, 250px 250px violet;
+
+            box-shadow: -250px -250px hotpink, -250px 0px red, -250px 250px orange, 0px -250px yellow, 0px 250px lime, 250px -250px turquoise, 250px 0px indigo, 250px 250px violet;
     opacity: 40%;
     scale: 2;
+}
+
+@-webkit-keyframes animate
+{
+    0%{
+        rotate: 0deg;
+    }
+    50%{
+        rotate: 180deg;
+    }
+    100%{
+        rotate: 360deg;
+    }
+    
 }
 
 @keyframes animate
@@ -158,5 +216,6 @@ h1::before{
 }
 
 p, div, small{
-    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+            backdrop-filter: blur(25px);
 }
