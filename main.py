@@ -168,7 +168,9 @@ class SiteBuilder:
                 continue
 
             name = app_data['AutoName'] if 'AutoName' in app_data else entry['name'][:-4]  # Remove .yml at the end of name
-            apps.append(App(name=name, repo=repo))
+            app = App(name=name, repo=repo)
+            if app.hacktoberfest:
+                apps.append(app)
 
             if self._debug_app_limit is not None and len(apps) >= self._debug_app_limit:
                 print("debug: DEBUG_APP_LIMIT reached, returning early")
