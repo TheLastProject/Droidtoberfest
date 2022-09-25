@@ -95,25 +95,7 @@ div{
     padding: 10px;
     border: var(--div-border) 2px solid;
     border-radius: 0 50px 0 50px;
-    /*max-height: 1000px;
-    overflow-y: scroll;
-    row-gap: 20px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--div-scroll-thumb);*/
 }
-/*div::-webkit-scrollbar{
-    width: 1em;
-}
-div::-webkit-scrollbar-track{
-    margin-block: 30px;
-    right: -10px;
-    margin-right: 10px;
-    
-}
-div::-webkit-scrollbar-thumb{
-    background-color: var(--div-scroll-thumb);
-    border-radius: 1em;
-}*/
 a{
     color: var(--link-color);
 }
