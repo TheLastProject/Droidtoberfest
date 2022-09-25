@@ -30,7 +30,7 @@ h1{
     font-weight: bold;
     text-align: center;
     font-size: 50;
-    background: var(title-gradient);
+    background: var(--title-gradient);
     color: var(---title-text-color);
     margin-left: 35%;
     margin-right: 35%;
@@ -95,11 +95,13 @@ div{
     padding: 10px;
     border: var(--div-border) 2px solid;
     border-radius: 0 50px 0 50px;
-    max-height: 1000px;
+    /*max-height: 1000px;
     overflow-y: scroll;
     row-gap: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--div-scroll-thumb);*/
 }
-div::-webkit-scrollbar{
+/*div::-webkit-scrollbar{
     width: 1em;
 }
 div::-webkit-scrollbar-track{
@@ -111,7 +113,7 @@ div::-webkit-scrollbar-track{
 div::-webkit-scrollbar-thumb{
     background-color: var(--div-scroll-thumb);
     border-radius: 1em;
-}
+}*/
 a{
     color: var(--link-color);
 }
