@@ -154,7 +154,7 @@ class SiteBuilder:
             app_data = yaml.load(app_data_unparsed.decode())
 
             # Skip archived apps
-            if 'ArchivePolicy' in app_data and app_data['ArchivePolicy'].startswith('0'):
+            if 'ArchivePolicy' in app_data and app_data['ArchivePolicy'] == 0:
                 print(f"fdroiddata: Ignoring {entry['name']}: archived")
                 continue
 
