@@ -16,7 +16,7 @@ jobs:
       - run: pip3 install -r requirements.txt
       - run: python3 main.py
         env:
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
       - run: 'echo "droidtoberfest.sylviavanos.nl" > docs/CNAME'
       - run: git config user.name github-actions
       - run: git config user.email github-actions@github.com
