@@ -94,6 +94,7 @@ class App:
     def __init__(self, name: str, repo: str):
         self.name = name
         self.repo = repo
+        self.link = repo[:-4] if repo.endswith(".git") else repo
         self.valid = True
         self.hacktoberfest = self._check_hacktoberfest()  # False = No, None = Unsupported host, True = Yes
 
