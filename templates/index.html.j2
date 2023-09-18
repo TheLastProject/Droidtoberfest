@@ -12,7 +12,7 @@
   <p>The following apps on F-Droid joined Hacktoberfest:</p>
   <div>
   {% for app in apps | sort(attribute='name') %}
-    <a href="{{ app.repo }}">{{ app.name }}</a>
+    <a href="{{ app.link }}">{{ app.name }}</a>
   {% endfor %}
   </div>
 </body>

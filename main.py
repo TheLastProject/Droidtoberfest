@@ -94,6 +94,7 @@ class App:
     def __init__(self, name: str, repo: str):
         self.name = name
         self.repo = repo
+        self.link = repo.removesuffix(".git")
         self.valid = True
         self.hacktoberfest = self._check_hacktoberfest()  # False = No, None = Unsupported host, True = Yes
 
@@ -101,13 +102,7 @@ class App:
         url = urlparse(self.repo)
 
         # Fix-up path for API requests
-        path = url.path
-        if path.startswith("/"):
-            path = path[1:]
-        if path.endswith("/"):
-            path = path[:-1]
-        if path.endswith(".git"):
-            path = path[:-4]
+        path = url.path.removeprefix("/").removesuffix("/").removesuffix(".git")
 
         if url.hostname == "github.com":
             print(f"github: Checking {path}")
@@ -167,7 +162,7 @@ class SiteBuilder:
                 print(f"fdroiddata: Ignoring {entry['name']}: can't find repo")
                 continue
 
-            name = app_data['AutoName'] if 'AutoName' in app_data else entry['name'][:-4]  # Remove .yml at the end of name
+            name = app_data['AutoName'] if 'AutoName' in app_data else entry['name'].removesuffix(".yml")
             app = App(name=name, repo=repo)
             if app.hacktoberfest:
                 apps.append(app)
