@@ -7,13 +7,15 @@
 </head>
 <body>
   <h1>Droidtoberfest</h1>
-  <p>This website scans <a href="https://f-droid.org/">F-Droid</a> for projects joining Hacktoberfest. Hopefully this will make it the best place to find cool Open Source Android projects to contribute to.</p>
+  <p>This website scans multiple FOSS app sources for projects joining Hacktoberfest. Hopefully this will make it the best place to find cool Open Source Android projects to contribute to.</p>
   <small>Help improve this website on <a href="https://github.com/TheLastProject/Droidtoberfest">Droidtoberfest</a></small>
-  <p>The following apps on F-Droid joined Hacktoberfest:</p>
-  <div>
-  {% for app in apps | sort(attribute='name') %}
-    <a href="{{ app.link }}">{{ app.name }}</a>
+  {% for source, apps in apps.items() %}
+    <p>The following apps on {{ source }} joined Hacktoberfest:</p>
+    <div>
+    {% for app in apps | sort(attribute='name') %}
+      <a href="{{ app.link }}">{{ app.name }}</a>
+    {% endfor %}
+    </div>
   {% endfor %}
-  </div>
 </body>
 </html>
