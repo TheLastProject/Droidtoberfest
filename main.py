@@ -106,6 +106,10 @@ class SiteBuilder:
             data = index_data.read().decode()
 
             for name, package_info in json.loads(data)['packages'].items():
+                # Skip Simple Mobile Tools, no longer FOSS
+                if name.startswith("com.simplemobiletools."):
+                    continue
+                
                 try:
                     name = package_info['metadata']['name']['en-US']
                 except:
