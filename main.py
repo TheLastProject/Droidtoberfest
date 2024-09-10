@@ -14,42 +14,43 @@ from jinja2 import Environment, FileSystemLoader
 class GitHubApi:
     api = Github(os.environ.get('GITHUB_TOKEN'))
 
-    def get_topics(project):
+    def _rate_limit_wait(headers):
+        # GitHub doesn't seem to unlock right at x-ratelimit-reset, so we sleep at least 30 seconds longer than requested
+        sleep_time = max(float(headers['x-ratelimit-reset']) - time.time() + 30, 30)
+        print(f"github: ratelimit reached. Sleeping until reset ({sleep_time} seconds)")
+        time.sleep(sleep_time)
+
+    def get_repo(path):
         try:
-            return GitHubApi.api.get_repo(project).get_topics()
+            return GitHubApi.api.get_repo(path)
         except RateLimitExceededException as e:
-            print(e.headers)
-            # GitHub doesn't seem to unlock right at x-ratelimit-reset, so we sleep at least 30 seconds longer than requested
-            sleep_time = max(float(e.headers['x-ratelimit-reset']) - time.time() + 30, 30)
-            print(f"github: ratelimit reached. Sleeping until reset ({sleep_time} seconds)")
-            time.sleep(sleep_time)
-            return GitHubApi.get_topics(project)
+            GitHubApi._rate_limit_wait(e.headers)
+            return GitHubApi.get_repo(path)
         except UnknownObjectException:
-            print(f"github: {project} doesn't exist")
             return None
+
+    def get_topics(repo):
+        try:
+            return repo.get_topics()
+        except RateLimitExceededException as e:
+            GitHubApi._rate_limit_wait(e.headers)
+            return GitHubApi.get_topics(repo)
 
 
 class GitLabApi:
     api = Gitlab()
 
-    def get_topics(project, attempt=0):
-        attempt += 1
-        if attempt > 5:
-            print(f"gitlab: consistent error for get_topics in {project}. Giving up...")
-            return None
-
+    def get_repo(path):
         try:
-            return GitLabApi.api.projects.get(project).topics
-        except (GitlabGetError, GitlabHttpError) as e:
-            print(e)
+            return GitLabApi.api.projects.get(path, retry_transient_errors=True)
+        except GitlabGetError as e:
             if e.response_code == 404:
-                print(f"gitlab: {project} doesn't exist")
                 return None
+            else:
+                raise e
 
-            print(f"gitlab: temporary error for get_topics in {project}. Waiting 30 seconds")
-            time.sleep(30)
-            return GitLabApi.get_topics(project, attempt)
-
+    def get_topics(repo):
+        return repo.topics
 
 class App:
     name: str
@@ -60,7 +61,6 @@ class App:
         self.name = name
         self.repo = repo
         self.link = repo.removesuffix(".git")
-        self.valid = True
         self.hacktoberfest = self._check_hacktoberfest()  # False = No, None = Unsupported host, True = Yes
 
     def _check_hacktoberfest(self) -> bool:
@@ -71,22 +71,37 @@ class App:
 
         if url.hostname == "github.com":
             print(f"github: Checking {path}")
-            topics = GitHubApi.get_topics(path)
-            if topics is None:
-                self.valid = False
+            repo = GitHubApi.get_repo(path)
+            if repo is None:
+                print(f"github: {path} doesn't exist, ignoring")
                 return False
+
+            if repo.archived:
+                print(f"github: {path} is archived, ignoring")
+                return False
+
+            topics = GitHubApi.get_topics(repo)
 
             return "hacktoberfest" in topics
         elif url.hostname == "gitlab.com":
             print(f"gitlab: Checking {path}")
-            topics = GitLabApi.get_topics(path)
-            if topics is None:
-                self.valid = False
+            repo = GitLabApi.get_repo(path)
+            if repo is None:
+                print(f"gitlab: {path} doesn't exist, ignoring")
                 return False
+
+            try:
+                if repo.archived:
+                    print(f"gitlab: {path} is archived, ignoring")
+                    return False
+            except AttributeError:
+                pass
+
+            topics = GitLabApi.get_topics(repo)
 
             return "hacktoberfest" in topics
 
-        print(f"hacktoberfest: unsupported git host ({url.hostname})")
+        print(f"hacktoberfest: unsupported git host ({url.hostname}), ignoring")
         return None
 
 
@@ -109,7 +124,7 @@ class SiteBuilder:
                 # Skip Simple Mobile Tools, no longer FOSS
                 if name.startswith("com.simplemobiletools."):
                     continue
-                
+
                 try:
                     name = package_info['metadata']['name']['en-US']
                 except:
