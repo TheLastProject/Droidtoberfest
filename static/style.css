@@ -1,9 +1,9 @@
 * {
     font-family: Arial, Helvetica, sans-serif;
     --body-bacground-color: rgb(253, 248, 241);
-    --title-gradient:linear-gradient(to right,rgba(255, 166, 0),rgb(255, 170, 199));
-    --title-text-color: aliceblue;
-    --title-shadow: rgba(255, 192, 203, 0.288);
+    --title-gradient:linear-gradient(to right,rgba(255, 166, 0),rgb(240, 114, 156));
+    --title-text-color: white;
+    --title-shadow: rgba(255, 138, 158, 0.288);
     --p-gradient:linear-gradient(to right,rgba(255, 243, 227, 0.7),rgba(255, 255, 255, 0.3));
     --p-border: rgba(51, 51, 51, 0.4);
     --p-tag: orange;
@@ -25,16 +25,25 @@
 body{
     background: var(--body-bacground-color);
     overflow-x: hidden;
+    margin: 0;
 }
+
+.page-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
 h1{
+    margin: 0;
+    padding: 20px 40px;
+    font-size: 2.5rem;
     font-weight: bold;
     text-align: center;
-    font-size: 50;
+    line-height: 3rem;
     background: var(--title-gradient);
-    color: var(---title-text-color);
-    margin-left: 35%;
-    margin-right: 35%;
-    padding: 20px;
+    color: var(--title-text-color);
     -moz-padding:2px;
     border-radius: 35px 0 35px 0;
     -webkit-box-shadow: 5px 5px 1px var(--title-shadow);
@@ -218,4 +227,13 @@ h1::before{
 p, div, small{
     -webkit-backdrop-filter: blur(25px);
             backdrop-filter: blur(25px);
+}
+
+@media screen and (max-width: 600px) {
+    h1 {
+        padding: 15px 30px;
+        font-size: 2rem;
+        line-height: 2.5rem;
+        border-radius: 25px 0 25px 0;
+    }
 }
