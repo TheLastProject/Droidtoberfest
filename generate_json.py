@@ -1,14 +1,13 @@
 import json
 import os
-import shutil
 import time
+from typing import Any
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
 from github import Github, RateLimitExceededException, UnknownObjectException
 from gitlab import Gitlab
 from gitlab.exceptions import GitlabGetError, GitlabHttpError
-from jinja2 import Environment, FileSystemLoader
 
 
 class GitHubApi:
@@ -63,6 +62,14 @@ class App:
         self.link = repo.removesuffix(".git")
         self.hacktoberfest = self._check_hacktoberfest()  # False = No, None = Unsupported host, True = Yes
 
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "repo": self.repo,
+            "link": self.link,
+            "hacktoberfest": self.hacktoberfest
+        }
+
     def _check_hacktoberfest(self) -> bool:
         url = urlparse(self.repo)
 
@@ -105,10 +112,9 @@ class App:
         return None
 
 
-class SiteBuilder:
+class AppJsonBuilder:
     def __init__(self):
         self._debug_app_limit = int(os.environ['DEBUG_APP_LIMIT']) if 'DEBUG_APP_LIMIT' in os.environ else None
-        self.env = Environment(loader=FileSystemLoader('templates'))
         self.apps = {
             "IzzyOnDroid": self._get_apps("https://apt.izzysoft.de/fdroid/repo/index-v2.json"),
             "F-Droid": self._get_apps("https://f-droid.org/repo/index-v2.json")
@@ -146,19 +152,13 @@ class SiteBuilder:
 
         return apps
 
-    def render_page(self):
-        # Ensure docs dir exists
-        os.makedirs('docs', exist_ok=True)
+    def save_apps(self, destination_path):
+        output = {}
+        for app_source in self.apps:
+            output[app_source] = [app.to_dict() for app in self.apps[app_source]]
 
-        # Copy CSS
-        shutil.copy('static/style.css', 'docs')
-
-        # Render template
-        template = self.env.get_template('index.html.j2')
-        with open('docs/index.html', 'w+') as f:
-            html = template.render(apps=self.apps)
-            f.write(html)
-
+        with open(destination_path, 'w') as app_data:
+            json.dump(output, app_data)
 
 if __name__ == "__main__":
-    SiteBuilder().render_page()
+    AppJsonBuilder().save_apps('docs/apps.json')
