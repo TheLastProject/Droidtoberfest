@@ -5,7 +5,7 @@ from typing import Any
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
-from github import Github, RateLimitExceededException, UnknownObjectException
+from github import Github, GithubException, RateLimitExceededException, UnknownObjectException
 from gitlab import Gitlab
 from gitlab.exceptions import GitlabGetError, GitlabHttpError
 
@@ -26,6 +26,10 @@ class GitHubApi:
             GitHubApi._rate_limit_wait(e.headers)
             return GitHubApi.get_repo(path)
         except UnknownObjectException:
+            return None
+        except GithubException as e:
+            if e.status != 404:
+                raise e
             return None
 
     def get_topics(repo):
